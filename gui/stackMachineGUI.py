@@ -8,7 +8,7 @@ class StackMachineApp:
 
 
         window_width = 400  
-        window_height = 600
+        window_height = 700
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
         x = (screen_width - window_width) // 2
@@ -33,7 +33,14 @@ class StackMachineApp:
                         "MUL  \t\t: MUL TOP TWO OPERANDS",
                         "DIV  \t\t: DIV TOP TWO OPERANDS",
                         "MOD  \t\t: MOD TOP TWO OPERANDS",
+                        "OR   \t\t: BITWISE OR",
+                        "AND  \t\t: BITWISE AND",
+                        "XOR  \t\t: BITWISE XOR",
+                        "NOT  \t\t: BITWISE NOT",
+                        "LSL  \t\t: ARITHMETIC LEFT SHIFT",
+                        "ASR  \t\t: ARITHMETIC RIGHT SHIFT",
                         "EXIT"]
+        
         for i, instruction in enumerate(instructions):
             label = tk.Label(isa_frame, text=instruction, font=("Arial", 12))
             label.grid(row=i, column=0, sticky="w")
@@ -61,7 +68,7 @@ class StackMachineApp:
             if push_command == "err":
                 self.update_result_label("ERROR: PUSH value is expected")
                 return
-            value = push_command
+            value = int(push_command)
             self.stack_machine.push(value)
             self.update_result_label(f"PUSHED VALUE: {value}")
         elif command.lower() == 'pop':
@@ -76,14 +83,24 @@ class StackMachineApp:
         elif command.lower() == 'div':
             self.update_result_label(self.stack_machine.divide())
         elif command.lower() == 'mod':
-            self.update_result_label(self.stack_machine.divide())
+            self.update_result_label(self.stack_machine.modulus())
+        elif command.lower() == 'or':
+            self.update_result_label(self.stack_machine.bitwiseOr())
+        elif command.lower() == 'and':
+            self.update_result_label(self.stack_machine.bitwiseAnd())
+        elif command.lower() == 'xor':
+            self.update_result_label(self.stack_machine.bitwiseXor())
+        elif command.lower() == 'not':
+            self.update_result_label(self.stack_machine.bitwiseNot())
+        elif command.lower() == 'lsl':
+            self.update_result_label(self.stack_machine.bitwiseLS())
+        elif command.lower() == 'asl':
+            self.update_result_label(self.stack_machine.bitwiseRS())
         elif command.lower() == 'exit':
             self.stack_machine = []
             self.root.destroy()
         else:
             self.update_result_label("Invalid input")
-        
-        # self.input_entry.delete(0,tk.END)
 
     def update_result_label(self, text):
         self.result_label.config(text=text)
